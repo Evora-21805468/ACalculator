@@ -9,6 +9,23 @@ import kotlinx.android.synthetic.main.item_expression.view.*
 
 class HistoryAdapter (context: Context, private val layout: Int, items: ArrayList<String>) : ArrayAdapter<String>(context,layout,items) {
 
+    override fun getCount(): Int {
+        return super.getCount()
+    }
+
+    override fun getItem(position: Int): String? {
+        return super.getItem(position)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return super.getItemId(position)
+    }
+
+
+    override fun notifyDataSetChanged() {
+        super.notifyDataSetChanged()
+    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(layout,parent,false)
         val expressionParts = getItem(position)?.split("=")

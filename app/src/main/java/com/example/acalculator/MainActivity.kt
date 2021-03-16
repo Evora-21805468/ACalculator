@@ -1,20 +1,15 @@
 package com.example.acalculator
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import net.objecthunter.exp4j.ExpressionBuilder
-import java.lang.Exception
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.*
-import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
     private val TAG = MainActivity::class.java.simpleName
@@ -29,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(TAG, "O método onCreate foi invocado")
-        setContentView(R.layout.activity_main)
+
     }
 
     override fun onDestroy() {
@@ -48,8 +43,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
-
 
         button_1.setOnClickListener {
             onClickSymbol("1")
@@ -130,6 +123,12 @@ class MainActivity : AppCompatActivity() {
         button_history.setOnClickListener {
             checkHistory()
         }
+
+        val configuration: Configuration = resources.configuration
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            list_history.adapter = HistoryAdapter(this, R.layout.item_expression, arrayListOf("1+1=2", "2+3=5"))
+        }
+
     }
 
     private fun backspace() {
