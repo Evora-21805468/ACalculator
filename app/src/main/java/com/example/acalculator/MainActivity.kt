@@ -1,8 +1,11 @@
 package com.example.acalculator
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -15,221 +18,169 @@ import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
     private val TAG = MainActivity::class.java.simpleName
+    private val VISOR_KEY = "visor"
     var pattern = "HH:mm:ss"
 
     @SuppressLint("SimpleDateFormat")
     var simpleDateFormat: SimpleDateFormat = SimpleDateFormat(pattern)
     var horasFormatadas: String = simpleDateFormat.format(Date().time)
     var history: MutableList<String> = mutableListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.i(TAG, "O método onCreate foi invocado")
         setContentView(R.layout.activity_main)
+    }
+
+    override fun onDestroy() {
+        Log.i(TAG, "O método onDestroy foi invocado")
+        super.onDestroy()
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        text_visor.text = savedInstanceState?.getString(VISOR_KEY)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.run { putString(VISOR_KEY, text_visor.text.toString()) }
+        super.onSaveInstanceState(outState)
     }
 
     override fun onStart() {
         super.onStart()
 
+
+
         button_1.setOnClickListener {
-            Log.i(TAG, "Click no botão 1")
-            if (text_visor.text == "0") {
-                text_visor.text = "1"
-            } else {
-                text_visor.append("1")
-            }
-            Toast.makeText(this, "button_1.setOnClickListener $horasFormatadas", Toast.LENGTH_SHORT)
-                .show()
+            onClickSymbol("1")
         }
 
         button_2.setOnClickListener {
-            Log.i(TAG, "Click no botão 2")
-            if (text_visor.text == "0") {
-                text_visor.text = "2"
-            } else {
-                text_visor.append("2")
-            }
-            Toast.makeText(this, "button_2.setOnClickListener $horasFormatadas", Toast.LENGTH_SHORT)
-                .show()
+            onClickSymbol("2")
         }
 
         button_3.setOnClickListener {
-            Log.i(TAG, "Click no botão 3")
-            if (text_visor.text == "0") {
-                text_visor.text = "3"
-            } else {
-                text_visor.append("3")
-            }
-            Toast.makeText(this, "button_3.setOnClickListener $horasFormatadas", Toast.LENGTH_SHORT)
-                .show()
+            onClickSymbol("3")
         }
 
         button_4.setOnClickListener {
-            Log.i(TAG, "Click no botão 4")
-            if (text_visor.text == "0") {
-                text_visor.text = "4"
-            } else {
-                text_visor.append("4")
-            }
-            Toast.makeText(this, "button_4.setOnClickListener $horasFormatadas", Toast.LENGTH_SHORT)
-                .show()
+            onClickSymbol("4")
         }
 
         button_5.setOnClickListener {
-            Log.i(TAG, "Click no botão 5")
-            if (text_visor.text == "0") {
-                text_visor.text = "5"
-            } else {
-                text_visor.append("5")
-            }
-            Toast.makeText(this, "button_5.setOnClickListener $horasFormatadas", Toast.LENGTH_SHORT)
-                .show()
+            onClickSymbol("5")
         }
 
         button_6.setOnClickListener {
-            Log.i(TAG, "Click no botão 6")
-            if (text_visor.text == "0") {
-                text_visor.text = "6"
-            } else {
-                text_visor.append("6")
-            }
-            Toast.makeText(this, "button_6.setOnClickListener $horasFormatadas", Toast.LENGTH_SHORT)
-                .show()
+            onClickSymbol("6")
         }
 
         button_7.setOnClickListener {
-            Log.i(TAG, "Click no botão 7")
-            if (text_visor.text == "0") {
-                text_visor.text = "7"
-            } else {
-                text_visor.append("7")
-            }
-            Toast.makeText(this, "button_7.setOnClickListener $horasFormatadas", Toast.LENGTH_SHORT)
-                .show()
+            onClickSymbol("7")
         }
 
         button_8.setOnClickListener {
-            Log.i(TAG, "Click no botão 8")
-            if (text_visor.text == "0") {
-                text_visor.text = "8"
-            } else {
-                text_visor.append("8")
-            }
-            Toast.makeText(this, "button_8.setOnClickListener $horasFormatadas", Toast.LENGTH_SHORT)
-                .show()
+            onClickSymbol("8")
         }
 
         button_9.setOnClickListener {
-            Log.i(TAG, "Click no botão 9")
-            if (text_visor.text == "0") {
-                text_visor.text = "9"
-            } else {
-                text_visor.append("9")
-            }
-            Toast.makeText(this, "button_9.setOnClickListener $horasFormatadas", Toast.LENGTH_SHORT)
-                .show()
+            onClickSymbol("9")
         }
 
         button_0.setOnClickListener {
-            Log.i(TAG, "Click no botão 0")
-            if (text_visor.text == "0") {
-                text_visor.text = "0"
-            } else {
-                text_visor.append("0")
-            }
-            Toast.makeText(this, "button_0.setOnClickListener $horasFormatadas", Toast.LENGTH_SHORT)
-                .show()
+            onClickSymbol("0")
+        }
+
+        button_doubleZero.setOnClickListener {
+            onClickSymbol("00")
         }
 
         button_decimal.setOnClickListener {
-            Log.i(TAG, "Click no botão .")
-            text_visor.append(".")
-            Toast.makeText(
-                this,
-                "button_decimal.setOnClickListener $horasFormatadas",
-                Toast.LENGTH_SHORT
-            ).show()
+            onClickSymbol(".")
         }
 
         button_adition.setOnClickListener {
-            Log.i(TAG, "Click no botão +")
-            text_visor.append("+")
-            Toast.makeText(
-                this,
-                "button_adition.setOnClickListener $horasFormatadas",
-                Toast.LENGTH_SHORT
-            ).show()
+            onClickSymbol("+")
         }
 
         button_subtraction.setOnClickListener {
-            Log.i(TAG, "Click no botão +")
-            text_visor.append("-")
-            Toast.makeText(
-                this,
-                "button_subtraction.setOnClickListener $horasFormatadas",
-                Toast.LENGTH_SHORT
-            ).show()
+            onClickSymbol("-")
         }
 
         button_multiplication.setOnClickListener {
-            Log.i(TAG, "Click no botão *")
-            text_visor.append("*")
-            Toast.makeText(
-                this,
-                "button_multiplication.setOnClickListener $horasFormatadas",
-                Toast.LENGTH_SHORT
-            ).show()
+            onClickSymbol("*")
         }
 
         button_division.setOnClickListener {
-            Log.i(TAG, "Click no botão /")
-            text_visor.append("/")
-            Toast.makeText(
-                this,
-                "button_division.setOnClickListener $horasFormatadas",
-                Toast.LENGTH_SHORT
-            ).show()
+            onClickSymbol("/")
         }
 
         button_equals.setOnClickListener {
-            Log.i(TAG, "Click no botão =")
-            try {
-
-                val expression = ExpressionBuilder(text_visor.text.toString()).build()
-                val resultado = expression.evaluate()
-                text_visor.text = resultado.toString()
-                history.add(resultado.toString())
-                Log.i(TAG, "O resultado da expressão é ${text_visor.text}")
-                Toast.makeText(
-                    this,
-                    "button_equals.setOnClickListener $horasFormatadas",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } catch (e: Exception) {
-                text_visor.text = "0"
-            }
+            onClickEquals()
         }
 
         button_clear.setOnClickListener {
-            Log.i(TAG, "Click no botão C")
-            text_visor.text = ""
-            Toast.makeText(
-                this,
-                "button_clear.setOnClickListener $horasFormatadas",
-                Toast.LENGTH_SHORT
-            ).show()
+            onClear()
+        }
+
+        button_backspace.setOnClickListener {
+            backspace()
         }
 
         button_history.setOnClickListener {
-            Log.i(TAG, "Click no botão Hist")
-            if (history.size >= 1) {
-                text_visor.text = history[history.size - 1]
-            }
-            Toast.makeText(
-                this,
-                "button_history.setOnClickListener $horasFormatadas",
-                Toast.LENGTH_SHORT
-            ).show()
+            checkHistory()
+        }
+    }
+
+    private fun backspace() {
+        Log.i(TAG, "Click no botão C")
+        var conta = text_visor.text.toString()
+        if (conta.isEmpty()) {
+            text_visor.text = "0"
+        } else {
+            text_visor.text = conta.substring(0, conta.length - 1)
+        }
+    }
+
+    private fun onClear() {
+        Log.i(TAG, "Click no botão CE")
+        text_visor.text = ""
+    }
+
+    private fun checkHistory() {
+        Log.i(TAG, "Click no botão HIST")
+        if (history.size >= 1) {
+            text_visor.text = history[history.size - 1]
+        }
+    }
+
+    private fun onClickSymbol(symbol: String) {
+        Log.i(TAG, "Click no botão $symbol")
+
+        if (text_visor.text == "0") {
+            text_visor.text = symbol
+        } else {
+            text_visor.append(symbol)
         }
 
+    }
 
+    private fun onClickEquals() {
+        Log.i(TAG, "Click no botão =")
+        try {
+
+            val expression = ExpressionBuilder(text_visor.text.toString()).build()
+            val resultado = expression.evaluate()
+            text_visor.text = resultado.toString()
+            history.add(resultado.toString())
+            Log.i(TAG, "O resultado da expressão é ${text_visor.text}")
+            Toast.makeText(
+                this,
+                "button_equals.setOnClickListener $horasFormatadas",
+                Toast.LENGTH_SHORT
+            ).show()
+        } catch (e: Exception) {
+            text_visor.text = "0"
+        }
     }
 }

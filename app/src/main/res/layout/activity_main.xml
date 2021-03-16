@@ -6,7 +6,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-
     <TextView
         android:id="@+id/text_visor"
         android:layout_width="match_parent"
@@ -149,7 +148,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="3">
+        android:layout_weight="5">
 
         <Button
             android:id="@+id/button_equals"
@@ -159,11 +158,25 @@
             android:text="=" />
 
         <Button
+            android:id="@+id/button_doubleZero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="00" />
+
+        <Button
+            android:id="@+id/button_backspace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="C"/>
+
+        <Button
             android:id="@+id/button_clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="C" />
+            android:text="CE" />
 
         <Button
             android:id="@+id/button_history"
