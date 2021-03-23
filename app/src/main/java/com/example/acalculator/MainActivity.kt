@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -19,17 +21,39 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SimpleDateFormat")
     var simpleDateFormat: SimpleDateFormat = SimpleDateFormat(pattern)
     var horasFormatadas: String = simpleDateFormat.format(Date().time)
-    var history: MutableList<String> = mutableListOf()
+    val lista = mutableListOf("1+1=2")
+    var history: HistoryAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         Log.i(TAG, "O método onCreate foi invocado")
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        Toast.makeText(this, "onResume ${horasFormatadas}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Toast.makeText(this, "onPause ${horasFormatadas}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Toast.makeText(this, "onStop ${horasFormatadas}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Toast.makeText(this, "onRestart ${horasFormatadas}", Toast.LENGTH_SHORT).show()
+    }
+
     override fun onDestroy() {
-        Log.i(TAG, "O método onDestroy foi invocado")
         super.onDestroy()
+        Toast.makeText(this, "onDestroy ${horasFormatadas}", Toast.LENGTH_SHORT).show()
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
@@ -43,70 +67,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
-        button_1.setOnClickListener {
-            onClickSymbol("1")
-        }
-
-        button_2.setOnClickListener {
-            onClickSymbol("2")
-        }
-
-        button_3.setOnClickListener {
-            onClickSymbol("3")
-        }
-
-        button_4.setOnClickListener {
-            onClickSymbol("4")
-        }
-
-        button_5.setOnClickListener {
-            onClickSymbol("5")
-        }
-
-        button_6.setOnClickListener {
-            onClickSymbol("6")
-        }
-
-        button_7.setOnClickListener {
-            onClickSymbol("7")
-        }
-
-        button_8.setOnClickListener {
-            onClickSymbol("8")
-        }
-
-        button_9.setOnClickListener {
-            onClickSymbol("9")
-        }
-
-        button_0.setOnClickListener {
-            onClickSymbol("0")
-        }
-
-        button_doubleZero.setOnClickListener {
-            onClickSymbol("00")
-        }
-
-        button_decimal.setOnClickListener {
-            onClickSymbol(".")
-        }
-
-        button_adition.setOnClickListener {
-            onClickSymbol("+")
-        }
-
-        button_subtraction.setOnClickListener {
-            onClickSymbol("-")
-        }
-
-        button_multiplication.setOnClickListener {
-            onClickSymbol("*")
-        }
-
-        button_division.setOnClickListener {
-            onClickSymbol("/")
-        }
 
         button_equals.setOnClickListener {
             onClickEquals()
@@ -124,9 +84,13 @@ class MainActivity : AppCompatActivity() {
             checkHistory()
         }
 
-        val configuration: Configuration = resources.configuration
-        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
-            list_history.adapter = HistoryAdapter(this, R.layout.item_expression, arrayListOf("1+1=2", "2+3=5"))
+        val orientation = this.resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            list_history?.adapter =
+                HistoryAdapter(this, R.layout.item_expression, arrayListOf("1+1=2", "2+3=5"))
+        } else {
+            history = HistoryAdapter(this, R.layout.item_expression, lista as ArrayList<String>)
+            list_history?.adapter = history
         }
 
     }
@@ -148,14 +112,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkHistory() {
         Log.i(TAG, "Click no botão HIST")
-        if (history.size >= 1) {
-            text_visor.text = history[history.size - 1]
+        if (lista.size >= 1) {
+            text_visor.text = lista[lista.size - 1]
         }
     }
 
-    private fun onClickSymbol(symbol: String) {
+    fun onClickSymbol(view: View) {
+        val symbol = view.tag.toString()
         Log.i(TAG, "Click no botão $symbol")
-
         if (text_visor.text == "0") {
             text_visor.text = symbol
         } else {
@@ -167,17 +131,25 @@ class MainActivity : AppCompatActivity() {
     private fun onClickEquals() {
         Log.i(TAG, "Click no botão =")
         try {
-
             val expression = ExpressionBuilder(text_visor.text.toString()).build()
             val resultado = expression.evaluate()
             text_visor.text = resultado.toString()
-            history.add(resultado.toString())
+            lista.add(resultado.toString())
+            val orientation = this.resources.configuration.orientation
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                // code for portrait mode
+            } else {
+                history?.notifyDataSetChanged()
+            }
+
             Log.i(TAG, "O resultado da expressão é ${text_visor.text}")
+
             Toast.makeText(
                 this,
                 "button_equals.setOnClickListener $horasFormatadas",
                 Toast.LENGTH_SHORT
             ).show()
+
         } catch (e: Exception) {
             text_visor.text = "0"
         }
