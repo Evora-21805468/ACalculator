@@ -1,27 +1,29 @@
 package com.example.acalculator
 
-import android.annotation.SuppressLint
+
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import net.objecthunter.exp4j.ExpressionBuilder
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+
+const val EXTRA_HISTORY = "com.example.acalculator"
 
 class MainActivity : AppCompatActivity() {
     private val TAG = MainActivity::class.java.simpleName
     private val VISOR_KEY = "visor"
     var pattern = "HH:mm:ss"
 
-    @SuppressLint("SimpleDateFormat")
     var simpleDateFormat: SimpleDateFormat = SimpleDateFormat(pattern)
     var horasFormatadas: String = simpleDateFormat.format(Date().time)
-    val lista = mutableListOf("1+1=2")
+    val lista = mutableListOf(Operation("1+1",2.0),Operation("2+3",5.0))
     var history: HistoryAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,16 +83,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         button_history.setOnClickListener {
-            checkHistory()
+            onClickHistory(button_history)
         }
 
         val orientation = this.resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            list_history?.adapter =
-                HistoryAdapter(this, R.layout.item_expression, arrayListOf("1+1=2", "2+3=5"))
+
         } else {
-            history = HistoryAdapter(this, R.layout.item_expression, lista as ArrayList<String>)
-            list_history?.adapter = history
+            history = HistoryAdapter(this, R.layout.item_expression, lista as ArrayList<Operation>)
+
         }
 
     }
@@ -110,11 +111,19 @@ class MainActivity : AppCompatActivity() {
         text_visor.text = ""
     }
 
-    private fun checkHistory() {
+   /* private fun checkHistory() {
         Log.i(TAG, "Click no botão HIST")
         if (lista.size >= 1) {
             text_visor.text = lista[lista.size - 1]
         }
+    }*/
+
+    private fun onClickHistory(view: View){
+        Log.i(TAG, "Click no botão HIST")
+        val intent = Intent(this , HistoryActivity::class.java)
+        intent.apply { putParcelableArrayListExtra(EXTRA_HISTORY, ArrayList(lista)) }
+        startActivity(intent)
+        finish()
     }
 
     fun onClickSymbol(view: View) {
@@ -132,9 +141,10 @@ class MainActivity : AppCompatActivity() {
         Log.i(TAG, "Click no botão =")
         try {
             val expression = ExpressionBuilder(text_visor.text.toString()).build()
+            val conta = text_visor.text.toString()
             val resultado = expression.evaluate()
             text_visor.text = resultado.toString()
-            lista.add(resultado.toString())
+            lista.add(Operation(conta,resultado))
             val orientation = this.resources.configuration.orientation
             if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                 // code for portrait mode
