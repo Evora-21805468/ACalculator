@@ -1,3 +1,10 @@
 <resources>
+    <!-- Drawer -->
     <string name="app_name">ACalculator</string>
+    <string name="calculator">Calculadora</string>
+    <string name="history">Histórico</string>
+    <string name="other">Outros</string>
+    <string name="sign_out">Sair</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
 </resources>
