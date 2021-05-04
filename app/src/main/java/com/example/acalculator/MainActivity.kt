@@ -33,11 +33,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
      override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val bundle = Bundle()
-        bundle.putParcelableArrayList(EXTRA_HISTORY, lista)
         when(item.itemId){
             R.id.nav_calculator -> NavigationManager.goToCalculatorFragment(supportFragmentManager, null)
-            R.id.nav_history -> NavigationManager.goToHistoryFragment(supportFragmentManager, bundle)
+            R.id.nav_history -> NavigationManager.goToHistoryFragment(supportFragmentManager, null)
         }
         drawer.closeDrawer(GravityCompat.START)
         return true
