@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         setupDrawerMenu()
         if(!screenRotated(savedInstanceState)){
-            NavigationManager.goToCalculatorFragment(supportFragmentManager, null)
+            NavigationManager.goToCalculatorFragment(supportFragmentManager,null)
         }
     }
 
