@@ -1,4 +1,4 @@
-package com.example.acalculator
+package com.example.acalculator.ui.fragments
 
 import android.content.Context
 
@@ -10,13 +10,19 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import butterknife.ButterKnife
+import com.example.acalculator.data.local.room.entities.Operation
+import com.example.acalculator.R
+import com.example.acalculator.ui.viewmodels.HistoryViewModel
+import com.example.acalculator.ui.listeners.OnListChanged
+import com.example.acalculator.ui.adapters.HistoryAdapter
 import kotlinx.android.synthetic.main.fragment_history.*
 
 
 
 var lista: ArrayList<Operation>? = ArrayList()
 
-class HistoryFragment : Fragment(), OnListChanged {
+class HistoryFragment : Fragment(),
+    OnListChanged {
 
     private lateinit var viewModel: HistoryViewModel
 
@@ -41,12 +47,23 @@ class HistoryFragment : Fragment(), OnListChanged {
         super.onStart()
         viewModel.registerListener(this)
         list_historic.layoutManager = LinearLayoutManager(activity as Context)
-        list_historic.adapter = lista?.let { HistoryAdapter(activity as Context, R.layout.item_expression, ArrayList(viewModel.onCreateList())) }
+        list_historic.adapter = lista?.let {
+            HistoryAdapter(
+                activity as Context,
+                R.layout.item_expression,
+                ArrayList(viewModel.onCreateList())
+            )
+        }
     }
 
     override fun onListChanged(value: List<Operation>) {
         list_historic.layoutManager = LinearLayoutManager(activity as Context)
-        list_historic.adapter =  HistoryAdapter(activity as Context, R.layout.item_expression, ArrayList(viewModel.onCreateList()) )
+        list_historic.adapter =
+            HistoryAdapter(
+                activity as Context,
+                R.layout.item_expression,
+                ArrayList(viewModel.onCreateList())
+            )
     }
 
 }

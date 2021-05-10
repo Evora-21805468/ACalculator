@@ -1,4 +1,4 @@
-package com.example.acalculator
+package com.example.acalculator.ui.fragments
 
 import android.content.Context
 import android.content.res.Configuration
@@ -12,8 +12,12 @@ import androidx.lifecycle.ViewModelProviders
 import butterknife.ButterKnife
 import butterknife.OnClick
 import butterknife.Optional
+import com.example.acalculator.*
+import com.example.acalculator.data.local.room.entities.Operation
+import com.example.acalculator.ui.viewmodels.CalculatorViewModel
+import com.example.acalculator.ui.listeners.OnDisplayChanged
+import com.example.acalculator.ui.adapters.HistoryAdapter
 import kotlinx.android.synthetic.main.fragment_calculator.*
-import kotlinx.android.synthetic.main.fragment_calculator.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -22,7 +26,8 @@ const val EXTRA_HISTORY = "com.example.acalculator"
 
 var operations = ArrayList<Operation>()
 
-class CalculatorFragment : Fragment(), OnDisplayChanged {
+class CalculatorFragment : Fragment(),
+    OnDisplayChanged {
     private val TAG = CalculatorFragment::class.java.simpleName
     private val VISOR_KEY = "visor"
     var pattern = "HH:mm:ss"
@@ -32,7 +37,10 @@ class CalculatorFragment : Fragment(), OnDisplayChanged {
 
     var simpleDateFormat: SimpleDateFormat = SimpleDateFormat(pattern)
     var horasFormatadas: String = simpleDateFormat.format(Date().time)
-    val lista = mutableListOf(Operation("1+1", 2.0), Operation("2+3", 5.0))
+    val lista = mutableListOf(
+        Operation("1+1", 2.0),
+        Operation("2+3", 5.0)
+    )
     var history: HistoryAdapter? = null
 
     override fun onCreateView(
@@ -75,7 +83,7 @@ class CalculatorFragment : Fragment(), OnDisplayChanged {
                 activity as Context,
                 R.layout.item_expression,
                 lista as ArrayList<Operation>
-            //ArrayList(viewModel.onShowList())
+                //ArrayList(viewModel.onShowList())
             )
 
         }

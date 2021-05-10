@@ -1,5 +1,6 @@
-package com.example.acalculator
+package com.example.acalculator.data.local.list
 
+import com.example.acalculator.data.local.room.entities.Operation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -12,7 +13,8 @@ class ListStorage private constructor() {
         fun getInstance(): ListStorage {
             synchronized(this) {
                 if (instance == null) {
-                    instance = ListStorage()
+                    instance =
+                        ListStorage()
                 }
                 return instance as ListStorage
             }

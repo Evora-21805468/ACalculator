@@ -1,17 +1,16 @@
-package com.example.acalculator
+package com.example.acalculator.domain.calculator
 
-import android.util.Log
-import kotlinx.android.synthetic.main.fragment_calculator.*
+import com.example.acalculator.data.local.list.ListStorage
+import com.example.acalculator.data.local.room.dao.OperationDao
+import com.example.acalculator.data.local.room.entities.Operation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.objecthunter.exp4j.ExpressionBuilder
 
-class CalculatorLogic {
+class CalculatorLogic (private val storage: OperationDao){
 
-    private val storage = ListStorage.getInstance()
-
-    fun getListOperations(): List<Operation>{
+    suspend fun getListOperations(): List<Operation>{
         return storage.getAll()
     }
 
@@ -29,7 +28,12 @@ class CalculatorLogic {
         val expressionBuilder = ExpressionBuilder(expression).build()
         val result = expressionBuilder.evaluate()
         CoroutineScope(Dispatchers.IO).launch {
-            storage.insert(Operation(expression, result))
+            storage.insert(
+                Operation(
+                    expression,
+                    result
+                )
+            )
         }
         return result
     }

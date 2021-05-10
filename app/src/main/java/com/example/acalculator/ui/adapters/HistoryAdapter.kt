@@ -1,12 +1,12 @@
-package com.example.acalculator
+package com.example.acalculator.ui.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.acalculator.data.local.room.entities.Operation
 import kotlinx.android.synthetic.main.item_expression.view.*
 
 class HistoryAdapter (private val context: Context, private val layout: Int, private val items: MutableList<Operation>) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
@@ -18,7 +18,9 @@ class HistoryAdapter (private val context: Context, private val layout: Int, pri
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
-       return HistoryViewHolder(LayoutInflater.from(context).inflate(layout,parent,false))
+       return HistoryViewHolder(
+           LayoutInflater.from(context).inflate(layout, parent, false)
+       )
     }
 
     override fun getItemCount(): Int {

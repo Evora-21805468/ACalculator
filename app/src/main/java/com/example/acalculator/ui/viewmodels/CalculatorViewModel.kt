@@ -1,10 +1,18 @@
-package com.example.acalculator
+package com.example.acalculator.ui.viewmodels
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import com.example.acalculator.data.local.room.CalculatorDatabase
+import com.example.acalculator.domain.calculator.CalculatorLogic
+import com.example.acalculator.data.local.room.entities.Operation
+import com.example.acalculator.ui.listeners.OnDisplayChanged
 
-class CalculatorViewModel : ViewModel() {
+class CalculatorViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val calculatorLogic = CalculatorLogic()
+    private val storage = CalculatorDatabase.getInstance(application).operationDao()
+    private val calculatorLogic = CalculatorLogic(storage)
+
     var display: String = ""
     private var listener: OnDisplayChanged? = null
 
@@ -21,7 +29,7 @@ class CalculatorViewModel : ViewModel() {
         listener = null
     }
 
-    fun onShowList(): List<Operation>{
+    suspend fun onShowList(): List<Operation>{
         return calculatorLogic.getListOperations()
     }
 

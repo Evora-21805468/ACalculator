@@ -1,4 +1,4 @@
-package com.example.acalculator
+package com.example.acalculator.ui.listeners
 
 interface OnDisplayChanged {
 
