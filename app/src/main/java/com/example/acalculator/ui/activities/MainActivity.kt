@@ -20,8 +20,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setupDrawerMenu()
         if(!screenRotated(savedInstanceState)){
             NavigationManager.goToCalculatorFragment(
-                supportFragmentManager,
-                null
+                supportFragmentManager
             )
         }
     }
@@ -43,12 +42,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
      override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.nav_calculator -> NavigationManager.goToCalculatorFragment(
-                supportFragmentManager,
-                null
+                supportFragmentManager
             )
             R.id.nav_history -> NavigationManager.goToHistoryFragment(
-                supportFragmentManager,
-                null
+                supportFragmentManager
+            )
+            R.id.nav_login -> NavigationManager.goToLoginFragment(
+                supportFragmentManager
             )
         }
         drawer.closeDrawer(GravityCompat.START)

@@ -38,6 +38,9 @@ android {
 dependencies {
     //Butter Knife
     implementation "com.jakewharton:butterknife:10.0.0"
+    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     kapt "com.jakewharton:butterknife-compiler:10.0.0"
 
     //WS
